@@ -1,0 +1,14 @@
+subscribers: []
+interval: 1m0s
+url: http://192.168.88.192
+dbPath: db
+thresholds:
+  temp:
+  - 20
+  - 34
+  humidity:
+  - 0
+  - 80
+  co2:
+  - 0
+  - 1200

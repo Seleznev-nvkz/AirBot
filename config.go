@@ -73,26 +73,6 @@ func (c *Config) save() error {
 	return ioutil.WriteFile(configPath, bytes, 0644)
 }
 
-//func (c *Config) init(configPath string) {
-//	var err error
-//	db, err = storm.Open(configPath)
-//	defer db.Close()
-//	if err != nil {
-//		log.Panic(err)
-//	}
-//
-//	db.Init(&Config{})
-//	err = db.One("ID", 1, c)
-//	log.Println(err)
-//	log.Println(c.subscribers)
-//
-//	var ok bool
-//	c.subscribers = append(c.subscribers, int64(123))
-//	log.Println(c.subscribers)
-//	err = db.Save(c)
-//	log.Println(err)
-//}
-
 func (c *Config) appendSubscriber(newSubscriber int64) {
 	exists := false
 	for _, subscriber := range c.Subscribers {

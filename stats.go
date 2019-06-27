@@ -23,3 +23,9 @@ func (s *StatsRecord) String() string {
 	return fmt.Sprintf("ID - %v\nTimestamp - %v\ntemp - %v\nhumidity - %v\nCO2 - %v",
 		s.ID, s.Timestamp, s.temp, s.humidity, s.co2)
 }
+
+func GetStatsByLastDay() (res []StatsRecord) {
+	now := time.Now()
+	db.Range("Timestamp", now.AddDate(0, 0, -1), now, &res)
+	return
+}

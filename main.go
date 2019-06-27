@@ -8,6 +8,7 @@ import (
 var sensor *Sensor
 var bot *tgbotapi.BotAPI
 var config *Config
+var db *DB
 
 func init() {
 	token, ok := os.LookupEnv("TOKEN")
@@ -21,6 +22,7 @@ func init() {
 	}
 
 	config = NewConfig()
+	db = newDB(config.DBPath)
 	sensor = NewSensor()
 	bot, _ = tgbotapi.NewBotAPI(token)
 	bot.Debug = true

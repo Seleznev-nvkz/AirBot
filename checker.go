@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -28,6 +29,11 @@ func runChecker() {
 		now := time.Now()
 		if now.Minute() == 30 && now.Hour() == 19 {
 			sendSticker("CAADAgADEQADrQWwDJL18PQEXEkiAg")
+		}
+
+		err := SaveRecord(sensor)
+		if err != nil {
+			log.Println(err)
 		}
 	}
 }

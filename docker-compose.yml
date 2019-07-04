@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  bot:
+    build:
+      dockerfile: Dockerfile
+      context: "."
+      args:
+        CGO_ENABLED: 0
+        GOOS: linux
+    volumes:
+      - "./.data/:/data/"
+      - "./example/config.yaml:/config.yaml"
+    environment:
+      - TOKEN=${TELEGRAM_BOT_TOKEN}

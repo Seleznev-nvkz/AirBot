@@ -74,7 +74,7 @@ func listen() {
 
 		if update.Message.Entities != nil {
 			for _, i := range *update.Message.Entities {
-				if i.IsMention() {
+				if i.Type == "mention" { // type tgbotapi.MessageEntity has no field or method IsMention
 					bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, sensor.FreshString()))
 				}
 			}

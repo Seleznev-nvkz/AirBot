@@ -6,7 +6,7 @@ import (
 )
 
 type StatsRecord struct {
-	*Sensor
+	*Sensor   `storm:"inline"`
 	ID        int       `storm:"id,increment"`
 	Timestamp time.Time `storm:"index"`
 }
@@ -24,8 +24,8 @@ func (s *StatsRecord) String() string {
 		s.ID, s.Timestamp, s.temp, s.humidity, s.co2)
 }
 
-func GetStatsByLastDay() (res []StatsRecord) {
+func GetRecentStats() (res []StatsRecord) {
 	now := time.Now()
-	db.Range("Timestamp", now.AddDate(0, 0, -1), now, &res)
+	_ = db.Range("Timestamp", now.Add(time.Duration(-2)*time.Hour), now, &res)
 	return
 }

@@ -3,12 +3,14 @@ package main
 import (
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
+	"path/filepath"
 )
 
 const helpText = `
 /subscribe
 /unsubscribe
 /check
+/graph
 /help`
 
 func handleCommand(message *tgbotapi.Message) {
@@ -27,6 +29,11 @@ func handleCommand(message *tgbotapi.Message) {
 		msg.Text = "You successful unsubscribed."
 	case "check":
 		msg.Text = sensor.FreshString()
+	case "graph":
+		buildGraph()
+		absPath, _ := filepath.Abs("./plot.png")
+		sendPhoto(absPath)
+		return
 	default:
 		msg.Text = "I don't know that command"
 	}
@@ -49,6 +56,15 @@ func sendMsg(msg string) {
 	for _, id := range config.Subscribers {
 		log.Println(id)
 		if _, err := bot.Send(tgbotapi.NewMessage(id, msg)); err != nil {
+			log.Panic(err)
+		}
+	}
+}
+
+func sendPhoto(fileId string) {
+	for _, id := range config.Subscribers {
+		log.Println(id)
+		if _, err := bot.Send(tgbotapi.NewPhotoShare(id, fileId)); err != nil {
 			log.Panic(err)
 		}
 	}

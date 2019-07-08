@@ -9,14 +9,13 @@ import (
 	"time"
 )
 
-var configPath string
-
 type Config struct {
 	Subscribers []int64       `yaml:"subscribers"`
 	Interval    time.Duration `yaml:"interval"`
 	Url         string        `yaml:"url"`
 	DBPath      string        `yaml:"dbPath"`
 	Thresholds  Thresholds    `yaml:"thresholds"`
+	path        string
 }
 
 type Thresholds struct {
@@ -25,7 +24,7 @@ type Thresholds struct {
 	CO2      [2]int     `yaml:"co2"`
 }
 
-func NewConfig() *Config {
+func NewConfig(path string) *Config {
 	c := &Config{
 		Subscribers: []int64{},
 		Url:         "http://192.168.88.192",
@@ -36,9 +35,10 @@ func NewConfig() *Config {
 			Humidity: [2]float64{0.0, 80.0},
 			CO2:      [2]int{0, 1200},
 		},
+		path: path,
 	}
 
-	bytes, err := ioutil.ReadFile(configPath)
+	bytes, err := ioutil.ReadFile(c.path)
 	if err == nil {
 		err = yaml.Unmarshal(bytes, c)
 		if err != nil {
@@ -70,7 +70,7 @@ func (c *Config) save() error {
 		return err
 	}
 
-	return ioutil.WriteFile(configPath, bytes, 0644)
+	return ioutil.WriteFile(c.path, bytes, 0644)
 }
 
 func (c *Config) appendSubscriber(newSubscriber int64) {

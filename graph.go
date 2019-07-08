@@ -6,10 +6,17 @@ import (
 )
 
 func buildGraph() {
+	var (
+		temp []float64
+		co2  []float64
+	)
 
-	//data := GetRecentStats()
-	timeRange := getRange(5)
+	for _, v := range GetRecentStats() {
+		temp = append(temp, v.Sensor.Temp)
+		co2 = append(co2, float64(v.Sensor.CO2/10))
+	}
 
+	timeRange := getRange(len(temp))
 	dimensions := 2
 	plot, _ := glot.NewPlot(dimensions, false, false)
 
@@ -17,11 +24,11 @@ func buildGraph() {
 
 	pointGroupName := "CO2 x10"
 	style := "lines"
-	points := [][]float64{timeRange, {555 / 10, 941 / 10, 949 / 10, 1032 / 10, 1340 / 10}}
+	points := [][]float64{timeRange, co2}
 	_ = plot.AddPointGroup(pointGroupName, style, points)
 
 	pointGroupName = "Temp"
-	points = [][]float64{timeRange, {26, 26, 23, 21, 19}}
+	points = [][]float64{timeRange, temp}
 	_ = plot.AddPointGroup(pointGroupName, style, points)
 
 	_ = plot.SavePlot("plot.png")

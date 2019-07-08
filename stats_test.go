@@ -17,8 +17,8 @@ func TestSaveRecord(t *testing.T) {
 		CO2:      15,
 	}
 
-	SaveRecord(testSensor)
-	records := GetStatsByLastDay()
+	_ = SaveRecord(testSensor)
+	records := GetRecentStats()
 	assert.Equal(t, len(records), 1)
 	assert.Equal(t, records[0].Sensor.String(), testSensor.String())
 }

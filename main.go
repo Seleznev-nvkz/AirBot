@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"os"
 )
@@ -11,21 +12,28 @@ var config *Config
 var db *DB
 
 func init() {
-	token, ok := os.LookupEnv("TOKEN")
-	if !ok {
-		panic("Set TOKEN")
+	var configPath string
+
+	if flag.Lookup("test.v") == nil {
+		token, ok := os.LookupEnv("TOKEN")
+		if !ok {
+			panic("Set TOKEN")
+		}
+
+		configPath, ok = os.LookupEnv("CONFIG_PATH")
+		if !ok {
+			configPath = "config.yaml"
+		}
+
+		bot, _ = tgbotapi.NewBotAPI(token)
+		bot.Debug = true
+	} else {
+		configPath = "/tmp/config.yaml"
 	}
 
-	configPath, ok = os.LookupEnv("CONFIG_PATH")
-	if !ok {
-		configPath = "config.yaml"
-	}
-
-	config = NewConfig()
+	config = NewConfig(configPath)
 	db = newDB(config.DBPath)
 	sensor = NewSensor()
-	bot, _ = tgbotapi.NewBotAPI(token)
-	bot.Debug = true
 }
 
 func main() {

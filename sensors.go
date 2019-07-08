@@ -9,21 +9,21 @@ import (
 )
 
 type Sensor struct {
-	temp     float64
-	humidity float64
-	co2      int
+	Temp     float64
+	Humidity float64
+	CO2      int
 }
 
 func NewSensor() *Sensor {
 	return &Sensor{
-		temp:     0.0,
-		humidity: 0.0,
-		co2:      0,
+		Temp:     0.0,
+		Humidity: 0.0,
+		CO2:      0,
 	}
 }
 
 func (s *Sensor) String() string {
-	return fmt.Sprintf("temp - %v\nhumidity - %v\nCO2 - %v", s.temp, s.humidity, s.co2)
+	return fmt.Sprintf("temp - %v\nhumidity - %v\nCO2 - %v", s.Temp, s.Humidity, s.CO2)
 }
 
 func (s *Sensor) FreshString() string {
@@ -47,11 +47,11 @@ func (s *Sensor) Update() error {
 	}
 	p := doc.Find("p").Nodes
 
-	s.temp, _ = strconv.ParseFloat(strings.TrimRight(
+	s.Temp, _ = strconv.ParseFloat(strings.TrimRight(
 		strings.TrimLeft(p[0].FirstChild.Data, `temp - `), ` C`), 64)
-	s.humidity, _ = strconv.ParseFloat(strings.TrimRight(
+	s.Humidity, _ = strconv.ParseFloat(strings.TrimRight(
 		strings.TrimLeft(p[1].FirstChild.Data, `humidity - `), ` %`), 64)
-	s.co2, _ = strconv.Atoi(strings.TrimRight(strings.TrimLeft(p[2].FirstChild.Data, `CO2 - `), ` ppm`))
+	s.CO2, _ = strconv.Atoi(strings.TrimRight(strings.TrimLeft(p[2].FirstChild.Data, `CO2 - `), ` ppm`))
 
 	return nil
 }

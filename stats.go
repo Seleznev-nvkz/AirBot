@@ -6,14 +6,14 @@ import (
 )
 
 type StatsRecord struct {
-	*Sensor
+	Sensor
 	ID        int       `storm:"id,increment"`
 	Timestamp time.Time `storm:"index"`
 }
 
 func SaveRecord(sensor *Sensor) error {
 	record := StatsRecord{
-		Sensor:    sensor,
+		Sensor:    *sensor,
 		Timestamp: time.Now(),
 	}
 	return db.Save(&record)
@@ -21,7 +21,7 @@ func SaveRecord(sensor *Sensor) error {
 
 func (s *StatsRecord) String() string {
 	return fmt.Sprintf("ID - %v\nTimestamp - %v\ntemp - %v\nhumidity - %v\nCO2 - %v",
-		s.ID, s.Timestamp, s.temp, s.humidity, s.co2)
+		s.ID, s.Timestamp, s.Temp, s.Humidity, s.CO2)
 }
 
 func GetStatsByLastDay() (res []StatsRecord) {

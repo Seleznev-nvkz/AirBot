@@ -13,4 +13,4 @@ Main part of configuration contains in yaml file.
 ## With Docker
 * copy provided docker-compose.yml and customize for your needs
 * compile from the sources and run - docker-compose build && docker-compose up -d
-* or just run latest version from dockerhub docker-compose up -d
+* or just run latest version from dockerhub - docker-compose pull && docker-compose up -d

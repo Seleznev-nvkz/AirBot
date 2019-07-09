@@ -2,6 +2,7 @@ subscribers: []
 interval: 1m0s
 url: http://192.168.88.192
 dbPath: /data/db
+plotPath: /data/plot.png
 thresholds:
   temp:
   - 20

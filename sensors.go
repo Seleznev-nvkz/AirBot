@@ -47,11 +47,22 @@ func (s *Sensor) Update() error {
 	}
 	p := doc.Find("p").Nodes
 
-	s.Temp, _ = strconv.ParseFloat(strings.TrimRight(
+	s.Temp, err = strconv.ParseFloat(strings.TrimRight(
 		strings.TrimLeft(p[0].FirstChild.Data, `temp - `), ` C`), 64)
-	s.Humidity, _ = strconv.ParseFloat(strings.TrimRight(
+	if err != nil {
+		return err
+	}
+	s.Humidity, err = strconv.ParseFloat(strings.TrimRight(
 		strings.TrimLeft(p[1].FirstChild.Data, `humidity - `), ` %`), 64)
-	s.CO2, _ = strconv.Atoi(strings.TrimRight(strings.TrimLeft(p[2].FirstChild.Data, `CO2 - `), ` ppm`))
-
+	if err != nil {
+		return err
+	}
+	co2, err := strconv.Atoi(strings.TrimRight(strings.TrimLeft(p[2].FirstChild.Data, `CO2 - `), ` ppm`))
+	if err != nil {
+		return err
+	}
+	if co2 > 0 {
+		s.CO2 = co2
+	}
 	return nil
 }

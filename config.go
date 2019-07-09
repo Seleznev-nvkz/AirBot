@@ -14,6 +14,7 @@ type Config struct {
 	Interval    time.Duration `yaml:"interval"`
 	Url         string        `yaml:"url"`
 	DBPath      string        `yaml:"dbPath"`
+	PlotPath    string        `yaml:"plotPath"`
 	Thresholds  Thresholds    `yaml:"thresholds"`
 	path        string
 }
@@ -35,7 +36,8 @@ func NewConfig(path string) *Config {
 			Humidity: [2]float64{0.0, 80.0},
 			CO2:      [2]int{0, 1200},
 		},
-		path: path,
+		PlotPath: "/data/plot.png",
+		path:     path,
 	}
 
 	bytes, err := ioutil.ReadFile(c.path)

@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
-	"path/filepath"
 )
 
 const helpText = `
@@ -31,8 +30,7 @@ func handleCommand(message *tgbotapi.Message) {
 		msg.Text = sensor.FreshString()
 	case "graph":
 		buildGraph()
-		absPath, _ := filepath.Abs("plot.png")
-		sendPhoto(absPath, message.Chat.ID)
+		sendPhoto(config.PlotPath, message.Chat.ID)
 		return
 	default:
 		msg.Text = "I don't know that command"
@@ -61,10 +59,8 @@ func sendMsg(msg string) {
 	}
 }
 
-func sendPhoto(fileId string, id int64) {
-	log.Println(id)
-	log.Println(fileId)
-	if _, err := bot.Send(tgbotapi.NewPhotoUpload(id, fileId)); err != nil {
+func sendPhoto(filePath string, id int64) {
+	if _, err := bot.Send(tgbotapi.NewPhotoUpload(id, filePath)); err != nil {
 		log.Panic(err)
 	}
 }

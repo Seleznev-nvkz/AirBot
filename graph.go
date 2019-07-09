@@ -30,9 +30,10 @@ func buildGraph() {
 	pointGroupName = "Temp"
 	points = [][]float64{timeRange, temp}
 	_ = plot.AddPointGroup(pointGroupName, style, points)
+	_ = plot.SavePlot(config.PlotPath)
 
-	_ = plot.SavePlot("plot.png")
-
+	// w8 for replot
+	time.Sleep(time.Second * 2)
 }
 
 func getRange(len int) []float64 {

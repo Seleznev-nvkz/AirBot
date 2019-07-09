@@ -20,4 +20,5 @@ services:
       - "./.data/:/data/"
       - "./example/config.yaml:/config.yaml"
     environment:
+      - CONFIG_PATH=/config.yaml
       - TOKEN=${TELEGRAM_BOT_TOKEN}

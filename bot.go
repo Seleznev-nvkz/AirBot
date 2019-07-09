@@ -32,7 +32,7 @@ func handleCommand(message *tgbotapi.Message) {
 	case "graph":
 		buildGraph()
 		absPath, _ := filepath.Abs("plot.png")
-		sendPhoto(absPath)
+		sendPhoto(absPath, message.Chat.ID)
 		return
 	default:
 		msg.Text = "I don't know that command"
@@ -61,12 +61,11 @@ func sendMsg(msg string) {
 	}
 }
 
-func sendPhoto(fileId string) {
-	for _, id := range config.Subscribers {
-		log.Println(id)
-		if _, err := bot.Send(tgbotapi.NewPhotoUpload(id, fileId)); err != nil {
-			log.Panic(err)
-		}
+func sendPhoto(fileId string, id int64) {
+	log.Println(id)
+	log.Println(fileId)
+	if _, err := bot.Send(tgbotapi.NewPhotoUpload(id, fileId)); err != nil {
+		log.Panic(err)
 	}
 }
 

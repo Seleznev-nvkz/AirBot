@@ -19,6 +19,7 @@ RUN go build -a -ldflags="-s -w" -installsuffix cgo -o /bot .
 
 
 FROM kudato/baseimage:alpine3.9
+RUN apk add --no-cache gnuplot
 WORKDIR /usr/bin/
 COPY --from=builder /bot /usr/bin/bot
 CMD [ "/usr/bin/bot" ]

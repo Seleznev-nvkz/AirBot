@@ -8,6 +8,11 @@ services:
       args:
         CGO_ENABLED: 0
         GOOS: linux
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
     volumes:
       - "./.data/:/data/"
       - "./example/config.yaml:/config.yaml"

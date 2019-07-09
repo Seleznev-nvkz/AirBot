@@ -4,7 +4,7 @@ services:
   bot:
     image: seleznev/air_bot:latest
     restart: always
-     container_name: air_bot
+    container_name: air_bot
     build:
       dockerfile: Dockerfile
       context: "."

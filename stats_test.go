@@ -8,8 +8,13 @@ import (
 )
 
 func TestSaveRecord(t *testing.T) {
-	db = newDB("/tmp/test_parse.db")
-	defer os.Remove("/tmp/test_parse.db")
+	configPath := "/tmp/config.yaml"
+	config = NewConfig(configPath)
+	config.DBPath = "/tmp/test_parse.db"
+	db = newDB(config.DBPath)
+
+	defer os.Remove(config.DBPath)
+	defer os.Remove(configPath)
 
 	testSensor := &Sensor{
 		Temp:     12.0,

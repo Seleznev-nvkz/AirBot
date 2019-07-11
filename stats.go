@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/asdine/storm"
 	"time"
 )
 
@@ -27,6 +26,6 @@ func (s *StatsRecord) String() string {
 
 func GetRecentStats() (res []StatsRecord) {
 	now := time.Now()
-	_ = db.Range("Timestamp", now.Add(time.Duration(-2)*time.Hour), now, &res, storm.Reverse())
+	_ = db.Range("Timestamp", now.Add(time.Duration(-2)*time.Hour), now, &res)
 	return
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"os"
 )
@@ -11,32 +10,24 @@ var bot *tgbotapi.BotAPI
 var config *Config
 var db *DB
 
-func init() {
+func main() {
 	var configPath string
 
-	if flag.Lookup("test.v") == nil {
-		token, ok := os.LookupEnv("TOKEN")
-		if !ok {
-			panic("Set TOKEN")
-		}
-
-		configPath, ok = os.LookupEnv("CONFIG_PATH")
-		if !ok {
-			configPath = "config.yaml"
-		}
-
-		bot, _ = tgbotapi.NewBotAPI(token)
-		bot.Debug = true
-	} else {
-		configPath = "/tmp/config.yaml"
+	token, ok := os.LookupEnv("TOKEN")
+	if !ok {
+		panic("Set TOKEN")
 	}
+	bot, _ = tgbotapi.NewBotAPI(token)
+	bot.Debug = true
 
+	configPath, ok = os.LookupEnv("CONFIG_PATH")
+	if !ok {
+		configPath = "config.yaml"
+	}
 	config = NewConfig(configPath)
 	db = newDB(config.DBPath)
 	sensor = NewSensor()
-}
 
-func main() {
 	go runChecker()
 	listen()
 }

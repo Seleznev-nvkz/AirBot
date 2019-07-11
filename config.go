@@ -16,7 +16,10 @@ type Config struct {
 	DBPath      string        `yaml:"dbPath"`
 	PlotPath    string        `yaml:"plotPath"`
 	Thresholds  Thresholds    `yaml:"thresholds"`
-	path        string
+	Steps       Steps         `yaml:"steps"`
+
+	currentThresholds Thresholds
+	path              string
 }
 
 type Thresholds struct {
@@ -25,7 +28,14 @@ type Thresholds struct {
 	CO2      [2]int     `yaml:"co2"`
 }
 
+type Steps struct {
+	Temp     float64 `yaml:"temp"`
+	Humidity float64 `yaml:"humidity"`
+	CO2      int     `yaml:"co2"`
+}
+
 func NewConfig(path string) *Config {
+	// create default config
 	c := &Config{
 		Subscribers: []int64{},
 		Url:         "http://192.168.88.192",
@@ -36,21 +46,28 @@ func NewConfig(path string) *Config {
 			Humidity: [2]float64{0.0, 80.0},
 			CO2:      [2]int{0, 1200},
 		},
+		Steps: Steps{
+			Temp:     1.0,
+			Humidity: 2.0,
+			CO2:      100,
+		},
 		PlotPath: "/data/plot.png",
-		path:     path,
+
+		currentThresholds: Thresholds{
+			Temp:     [2]float64{20.0, 34.0},
+			Humidity: [2]float64{0.0, 80.0},
+			CO2:      [2]int{0, 1200},
+		},
+		path: path,
 	}
 
+	// update from file
 	bytes, err := ioutil.ReadFile(c.path)
 	if err == nil {
 		err = yaml.Unmarshal(bytes, c)
 		if err != nil {
 			log.Panic(err)
 		}
-	}
-
-	url, ok := os.LookupEnv("URL")
-	if ok {
-		c.Url = url
 	}
 
 	group, ok := os.LookupEnv("GROUP_ID")
@@ -73,6 +90,34 @@ func (c *Config) save() error {
 	}
 
 	return ioutil.WriteFile(c.path, bytes, 0644)
+}
+
+func (c *Config) tempUp() {
+	c.currentThresholds.Temp[1] += c.Steps.Temp
+	c.resetThresholds()
+}
+
+func (c *Config) humidityUp() {
+	c.currentThresholds.Humidity[1] += c.Steps.Humidity
+	c.resetThresholds()
+}
+
+func (c *Config) co2Up() {
+	c.currentThresholds.CO2[1] += c.Steps.CO2
+	c.resetThresholds()
+}
+
+var refreshThresholds = time.Hour * 2
+var refreshReady = true
+
+func (c *Config) resetThresholds() {
+	if refreshReady {
+		refreshReady = false
+		go func(timeout time.Duration) {
+			time.Sleep(timeout)
+			c.currentThresholds = c.Thresholds
+		}(refreshThresholds)
+	}
 }
 
 func (c *Config) appendSubscriber(newSubscriber int64) {

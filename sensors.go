@@ -66,3 +66,19 @@ func (s *Sensor) Update() error {
 	}
 	return nil
 }
+
+func (s *Sensor) validate() int {
+	if s.Temp < config.currentThresholds.Temp[0] || s.Temp > config.currentThresholds.Temp[1] {
+		config.tempUp()
+		return TEMPERATURE
+	}
+	if s.Humidity < config.currentThresholds.Humidity[0] || s.Humidity > config.currentThresholds.Humidity[1] {
+		config.humidityUp()
+		return HUMIDITY
+	}
+	if s.CO2 < config.currentThresholds.CO2[0] || s.CO2 > config.currentThresholds.CO2[1] {
+		config.co2Up()
+		return CO2
+	}
+	return -1
+}

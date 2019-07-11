@@ -113,12 +113,10 @@ func buildGraph(mode string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	fo, err := os.Create(config.PlotPath)
 	if err != nil {
 		panic(err)
 	}
-
 	if _, err := fo.Write(buffer.Bytes()); err != nil {
 		panic(err)
 	}

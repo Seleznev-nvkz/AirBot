@@ -17,6 +17,8 @@ type Config struct {
 	PlotPath    string        `yaml:"plotPath"`
 	Thresholds  Thresholds    `yaml:"thresholds"`
 	Steps       Steps         `yaml:"steps"`
+	WorkStart   int           `yaml:"workStart"`
+	WorkFinish  int           `yaml:"workFinish"`
 
 	currentThresholds Thresholds
 	path              string
@@ -51,7 +53,9 @@ func NewConfig(path string) *Config {
 			Humidity: 2.0,
 			CO2:      100,
 		},
-		PlotPath: "/data/plot.png",
+		WorkStart:  11,
+		WorkFinish: 20,
+		PlotPath:   "/data/plot.png",
 
 		currentThresholds: Thresholds{
 			Temp:     [2]float64{20.0, 34.0},

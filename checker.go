@@ -17,19 +17,22 @@ func runChecker() {
 
 	for range ticker.C {
 		sensor.Update()
-		switch sensor.validate() {
-		case TEMPERATURE:
-			sendSticker("CAADAgAD9AEAAnELQgX2FdOwiYZwbgI")
-			sendMsg(fmt.Sprintf("Temp - %.2f", sensor.Temp))
-		case HUMIDITY:
-			sendSticker("CAADAgADNQADuhxDEv_cQsYUoBwZAg")
-			sendMsg(fmt.Sprintf("Humidity - %.2f", sensor.Humidity))
-		case CO2:
-			sendSticker("CAADAgAD9AEAAnELQgX2FdOwiYZwbgI")
-			sendMsg(fmt.Sprintf("CO2 - %v", sensor.CO2))
+		now := time.Now()
+
+		if config.WorkFinish > now.Hour() && now.Hour() > config.WorkStart {
+			switch sensor.validate() {
+			case TEMPERATURE:
+				sendSticker("CAADAgAD9AEAAnELQgX2FdOwiYZwbgI")
+				sendMsg(fmt.Sprintf("Temp - %.2f", sensor.Temp))
+			case HUMIDITY:
+				sendSticker("CAADAgADNQADuhxDEv_cQsYUoBwZAg")
+				sendMsg(fmt.Sprintf("Humidity - %.2f", sensor.Humidity))
+			case CO2:
+				sendSticker("CAADAgAD9AEAAnELQgX2FdOwiYZwbgI")
+				sendMsg(fmt.Sprintf("CO2 - %v", sensor.CO2))
+			}
 		}
 
-		now := time.Now()
 		if now.Minute() == 30 && now.Hour() == 19 {
 			sendSticker("CAADAgADEQADrQWwDJL18PQEXEkiAg")
 		}

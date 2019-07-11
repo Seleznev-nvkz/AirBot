@@ -61,7 +61,7 @@ func (s *Sensor) Update() error {
 	if err != nil {
 		return err
 	}
-	if co2 > 0 {
+	if co2 > 1 {
 		s.CO2 = co2
 	}
 	return nil

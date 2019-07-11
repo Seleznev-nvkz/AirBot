@@ -19,7 +19,8 @@ RUN go build -a -ldflags="-s -w" -installsuffix cgo -o /bot .
 
 
 FROM kudato/baseimage:alpine3.9
-RUN apk add --no-cache gnuplot
+ENV TZ=Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 WORKDIR /usr/bin/
 COPY --from=builder /bot /usr/bin/bot
 CMD [ "/usr/bin/bot" ]

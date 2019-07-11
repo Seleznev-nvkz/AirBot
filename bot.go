@@ -10,6 +10,9 @@ const helpText = `
 /unsubscribe
 /check
 /graph
+/graph_temp
+/graph_co2
+/graph_hum
 /help`
 
 func handleCommand(message *tgbotapi.Message) {
@@ -29,7 +32,19 @@ func handleCommand(message *tgbotapi.Message) {
 	case "check":
 		msg.Text = sensor.FreshString()
 	case "graph":
-		buildGraph()
+		buildGraph("all")
+		sendPhoto(config.PlotPath, message.Chat.ID)
+		return
+	case "graph_temp":
+		buildGraph("temp")
+		sendPhoto(config.PlotPath, message.Chat.ID)
+		return
+	case "graph_co2":
+		buildGraph("co2")
+		sendPhoto(config.PlotPath, message.Chat.ID)
+		return
+	case "graph_hum":
+		buildGraph("hum")
 		sendPhoto(config.PlotPath, message.Chat.ID)
 		return
 	default:

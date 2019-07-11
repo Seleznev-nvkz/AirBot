@@ -8,7 +8,9 @@ import (
 	"time"
 )
 
-func buildGraph() {
+func buildGraph(mode string) {
+	recentStats := GetRecentStats()
+	zeros := make([]float64, len(recentStats))
 	var (
 		temp      []float64
 		co2       []float64
@@ -16,7 +18,7 @@ func buildGraph() {
 		timestamp []time.Time
 	)
 
-	for _, v := range GetRecentStats() {
+	for _, v := range recentStats {
 		temp = append(temp, v.Sensor.Temp)
 		co2 = append(co2, float64(v.Sensor.CO2/10))
 		humidity = append(humidity, v.Sensor.Humidity)
@@ -53,6 +55,38 @@ func buildGraph() {
 		YValues: humidity,
 	}
 
+	zerosTs := chart.TimeSeries{
+		Style: chart.Style{
+			Show:        true,
+			StrokeColor: chart.ColorTransparent,
+		},
+		XValues: timestamp,
+		YValues: zeros,
+	}
+	var series []chart.Series
+
+	switch mode {
+	case "temp":
+		series = []chart.Series{
+			temperatureTs,
+		}
+	case "co2":
+		series = []chart.Series{
+			co2Ts,
+		}
+	case "hum":
+		series = []chart.Series{
+			humidityTs,
+		}
+	default:
+		series = []chart.Series{
+			temperatureTs,
+			co2Ts,
+			humidityTs,
+		}
+	}
+	series = append(series, zerosTs)
+
 	graph := chart.Chart{
 		XAxis: chart.XAxis{
 			NameStyle:      chart.StyleShow(),
@@ -63,11 +97,7 @@ func buildGraph() {
 			NameStyle: chart.StyleShow(),
 			Style:     chart.StyleShow(),
 		},
-		Series: []chart.Series{
-			temperatureTs,
-			co2Ts,
-			humidityTs,
-		},
+		Series: series,
 	}
 
 	graph.Elements = []chart.Renderable{

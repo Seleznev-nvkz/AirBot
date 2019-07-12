@@ -20,7 +20,11 @@ func buildGraph(mode string) {
 
 	for _, v := range recentStats {
 		temp = append(temp, v.Sensor.Temp)
-		co2 = append(co2, float64(v.Sensor.CO2/10))
+		if mode == "co2" {
+			co2 = append(co2, float64(v.Sensor.CO2))
+		} else {
+			co2 = append(co2, float64(v.Sensor.CO2/10))
+		}
 		humidity = append(humidity, v.Sensor.Humidity)
 		timestamp = append(timestamp, v.Timestamp)
 	}

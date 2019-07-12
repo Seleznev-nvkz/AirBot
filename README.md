@@ -4,12 +4,12 @@
 
 ### Environment
 
-| name  | default  | description  |
-| :------------: | :------------: | :------------: |
-| `TOKEN`  |  required | telegram bot token  |
-| `CONFIG_PATH`  | `config.yaml`  | path to config  |
-| `URL`  | `192.168.88.192`  | sensor url (esp8266-mh-z19)  |
-| `GROUP_ID`  | none  | will be added to `config.Subscribers`  |
+| name          | default          | description                           |
+| :------------ | :--------------- | :------------------------------------ |
+| `TOKEN`       |  required        | telegram bot token                    |
+| `CONFIG_PATH` | `config.yaml`    | path to config                        |
+| `URL`         | `192.168.88.192` | sensor url (esp8266-mh-z19)           |
+| `GROUP_ID`    | none             | will be added to `config.Subscribers` |
 
 ### Install With Docker
 * copy provided `docker-compose.yml` and customize for your needs
@@ -26,3 +26,7 @@
 |  `/graph_temp`   | `"temp"`   | 
 |  `/graph_co2`    | `"co2"`    |
 |  `/graph_hum`    | `"hum"`    |
+
+### Result example
+
+![Result example](https://i.gyazo.com/171ea4a095e5171cf336382f2ac8c236.jpg)

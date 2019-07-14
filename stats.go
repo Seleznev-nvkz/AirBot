@@ -24,8 +24,11 @@ func (s *StatsRecord) String() string {
 		s.ID, s.Timestamp, s.Temp, s.Humidity, s.CO2)
 }
 
-func GetRecentStats() (res []StatsRecord) {
+func GetRecentStats() (res []StatsRecord, err error) {
 	now := time.Now()
-	_ = db.Range("Timestamp", now.Add(time.Duration(-2)*time.Hour), now, &res)
+	err = db.Range("Timestamp", now.Add(time.Duration(-2)*time.Hour), now, &res)
+	if err != nil {
+		return
+	}
 	return
 }

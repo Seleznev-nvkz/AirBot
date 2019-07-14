@@ -9,7 +9,10 @@ import (
 )
 
 func buildGraph(mode string) {
-	recentStats := GetRecentStats()
+	recentStats, err := GetRecentStats()
+	if err != nil {
+		log.Panic(err)
+	}
 	zeros := make([]float64, len(recentStats))
 	var (
 		temp      []float64
@@ -113,7 +116,7 @@ func buildGraph(mode string) {
 	}
 
 	buffer := bytes.NewBuffer([]byte{})
-	err := graph.Render(chart.PNG, buffer)
+	err = graph.Render(chart.PNG, buffer)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -16,7 +16,10 @@ func runChecker() {
 	ticker := time.NewTicker(config.Interval)
 
 	for range ticker.C {
-		sensor.Update()
+		err := sensor.Update()
+		if err != nil {
+			log.Panic(err)
+		}
 		now := time.Now()
 		day := now.Weekday().String()
 
@@ -40,7 +43,7 @@ func runChecker() {
 			}
 		}
 
-		err := SaveRecord(sensor)
+		err = SaveRecord(sensor)
 		if err != nil {
 			log.Println(err)
 		}

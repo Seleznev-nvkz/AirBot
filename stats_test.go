@@ -23,7 +23,7 @@ func TestSaveRecord(t *testing.T) {
 	}
 
 	_ = SaveRecord(testSensor)
-	records := GetRecentStats()
+	records, _ := GetRecentStats()
 	assert.Equal(t, len(records), 1)
 	assert.Equal(t, records[0].Sensor.String(), testSensor.String())
 }

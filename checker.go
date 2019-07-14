@@ -18,6 +18,7 @@ func runChecker() {
 	for range ticker.C {
 		sensor.Update()
 		now := time.Now()
+		day := now.Weekday().String()
 
 		if config.WorkFinish > now.Hour() && now.Hour() > config.WorkStart {
 			switch sensor.validate() {
@@ -33,8 +34,10 @@ func runChecker() {
 			}
 		}
 
-		if now.Minute() == 30 && now.Hour() == 19 {
-			sendSticker("CAADAgADEQADrQWwDJL18PQEXEkiAg")
+		if day != "Sunday" && day != "Saturday" {
+			if now.Minute() == 30 && now.Hour() == 19 {
+				sendSticker("CAADAgADEQADrQWwDJL18PQEXEkiAg")
+			}
 		}
 
 		err := SaveRecord(sensor)

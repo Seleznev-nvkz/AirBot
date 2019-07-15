@@ -13,16 +13,18 @@ func buildGraph(mode string) {
 	if err != nil {
 		log.Panic(err)
 	}
-	zeros := make([]float64, len(recentStats))
 	var (
 		temp      []float64
 		co2       []float64
 		humidity  []float64
 		timestamp []time.Time
+		zeros     []float64
 	)
 
 	for _, v := range recentStats {
-		temp = append(temp, v.Sensor.Temp)
+		t := v.Sensor.Temp
+		temp = append(temp, t)
+		zeros = append(zeros, t/2)
 		if mode == "co2" {
 			co2 = append(co2, float64(v.Sensor.CO2))
 		} else {
@@ -95,6 +97,11 @@ func buildGraph(mode string) {
 	series = append(series, zerosTs)
 
 	graph := chart.Chart{
+		Background: chart.Style{
+			Padding: chart.Box{
+				Top: 30,
+			},
+		},
 		XAxis: chart.XAxis{
 			NameStyle:      chart.StyleShow(),
 			Style:          chart.StyleShow(),
